@@ -6,16 +6,16 @@ from io import StringIO
 
 
 # Eine Überschrift der ersten Ebene
-st.write("# Gerätemanagement")
+st.write("Musikerkennung")
 
 # tabs
-tab1, tab2 = st.tabs(["hochladen", "erkennen"])
+tab1, tab2 = st.tabs(["Hochladen", "Erkennen"])
 
 
 with tab1:
-     st.write("hochladen")
+     st.write("Hochladen")
 
-uploaded_file = st.file_uploader("Choose a file")
+uploaded_file = st.file_uploader("Datei auswählen")
 if uploaded_file is not None:
     # To read file as bytes:
     bytes_data = uploaded_file.getvalue()
@@ -29,4 +29,4 @@ if uploaded_file is not None:
 
 
 with tab2:
-    st.write("erkennen")
+    st.write("Erkennen")
