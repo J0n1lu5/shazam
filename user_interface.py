@@ -8,14 +8,14 @@ from Songs import Song
 
 
 # Eine Überschrift der ersten Ebene
-st.write("# Gerätemanagement")
+st.write("Musikerkennung")
 
 # tabs
-tab1, tab2 = st.tabs(["hochladen", "erkennen"])
+tab1, tab2 = st.tabs(["Hochladen", "Erkennen"])
 
 
 with tab1:
-    st.write("hochladen")
+    st.write("Hochladen")
     
     with st.form ("upload"):
 
@@ -28,9 +28,16 @@ with tab1:
         title = st.text_input("# Title") 
         
         interpret = st.text_input("# Interpret")   
+   
 
-        submitted = st.form_submit_button("Submit")
-        if submitted:
+uploaded_file = st.file_uploader("Datei auswählen")
+if uploaded_file is not None:
+    # To read file as bytes:
+    bytes_data = uploaded_file.getvalue()
+    st.write(bytes_data)
+
+    submitted = st.form_submit_button("Submit")
+    if submitted:
 
             new_song= Song(title,interpret)
             new_song.store_data()
@@ -38,7 +45,7 @@ with tab1:
             st.rerun()
 
 
-        if title and interpret is not None:
+    if title and interpret is not None:
             with DDGS() as ddgs:
                 keywords = f"{title} {interpret} album cover"
                 ddgs_images_gen = ddgs.images(
@@ -77,4 +84,4 @@ with tab1:
 
 
 with tab2:
-    st.write("erkennen")
+    st.write("Erkennen")
