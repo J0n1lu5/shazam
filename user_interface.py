@@ -29,20 +29,13 @@ with tab1:
         
         interpret = st.text_input("# Interpret")   
    
+        submitted = st.form_submit_button("Submit")
+        if submitted:
 
-uploaded_file = st.file_uploader("Datei auswählen")
-if uploaded_file is not None:
-    # To read file as bytes:
-    bytes_data = uploaded_file.getvalue()
-    st.write(bytes_data)
-
-    submitted = st.form_submit_button("Submit")
-    if submitted:
-
-            new_song= Song(title,interpret)
-            new_song.store_data()
-            st.write("upload complete")    
-            st.rerun()
+                new_song= Song(title,interpret)
+                new_song.store_data()
+                st.write("upload complete")    
+                st.rerun()
 
 
     if title and interpret is not None:
