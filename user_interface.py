@@ -38,6 +38,8 @@ with tab1:
                 st.rerun()
 
 
+    #Brauch noch exeption handling
+                
     if title and interpret is not None:
             with DDGS() as ddgs:
                 keywords = f"{title} {interpret} album cover"
@@ -46,7 +48,7 @@ with tab1:
                     region="wt-wt",
                     safesearch="off",
                     size=None,
-                    color="Monochrome",
+                    color="",
                     type_image=None,
                     layout=None,
                     license_image=None,
