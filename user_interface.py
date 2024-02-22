@@ -4,7 +4,7 @@ from duckduckgo_search import DDGS
 import io
 import requests
 from PIL import Image
-from Songs import Song
+from Store_Data import Data
 
 
 # Eine Überschrift der ersten Ebene
@@ -32,7 +32,7 @@ with tab1:
         submitted = st.form_submit_button("Submit")
         if submitted:
 
-                new_song= Song(title,interpret)
+                new_song= Data(title,interpret)
                 new_song.store_data()
                 st.write("upload complete")    
                 st.rerun()

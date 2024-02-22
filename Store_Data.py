@@ -3,13 +3,11 @@ from tinydb import TinyDB, Query
 from serializer import serializer
 
 
-class Song ():
+class Data ():
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('Songs')
 
     def __init__ (self, song_name : str, interpret : str):
         self.song_name = song_name
-        # The user id of the user that manages the device
-        # We don't store the user object itself, but only the id (as a key)
         self.interpret = interpret
         self.is_active = True
 
