@@ -5,6 +5,7 @@ import io
 import requests
 from PIL import Image
 from Store_Data import Data
+from Fingerprint import AudioFingerprinter
 
 
 # Eine Überschrift der ersten Ebene
@@ -16,6 +17,17 @@ tab1, tab2 = st.tabs(["Hochladen", "Erkennen"])
 
 with tab1:
     st.write("Hochladen")
+    
+    with st.form ("fingerprint test"):
+        uploaded_song = st.file_uploader("Choose a file")
+        if uploaded_song is not None:
+            #fingerprint erstellen und ablegen in der datenbank
+            st.write("file ausgewählt")
+
+        submitted = st.form_submit_button("Submit")
+        if submitted:
+            AudioFingerprinter.fingerprint_file(uploaded_song)
+    
     
     with st.form ("upload"):
 
@@ -33,7 +45,7 @@ with tab1:
         if submitted:
 
                 new_song= Data(title,interpret)
-                new_song.store_data()
+                new_song.store_data()                
                 st.write("upload complete")    
                 st.rerun()
 
@@ -80,3 +92,13 @@ with tab1:
 
 with tab2:
     st.write("Erkennen")
+
+    with st.form ("fingerprint test"):
+        uploaded_song = st.file_uploader("Choose a file")
+        if uploaded_song is not None:
+            #fingerprint erstellen und ablegen in der datenbank
+            st.write("file ausgewählt")
+
+        submitted = st.form_submit_button("Submit")
+        if submitted:
+            AudioFingerprinter.fingerprint_file(uploaded_song)
