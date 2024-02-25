@@ -3,6 +3,7 @@ import streamlit as st
 from duckduckgo_search import DDGS
 import io
 import requests
+from recognise import SongRecognizer
 from PIL import Image
 from Store_Data import Data
 from Fingerprint import AudioFingerprinter
@@ -10,6 +11,7 @@ import os
 import tempfile
 import numpy as np
 import settings
+from database_storage import AudioDatabase
 
 
 # Eine Überschrift der ersten Ebene
@@ -49,9 +51,12 @@ with tab1:
                 print (uploaded_song)                     
                 fingerprinter_instance = AudioFingerprinter()
                 fingerprint = fingerprinter_instance.fingerprint_file(file_path)
+                new_song = AudioDatabase("shazam/database.json")
+                new_song.store_song(fingerprint,song_info)
+                
                 print (fingerprint)
-                new_song= Data(title,interpret,fingerprint)
-                new_song.store_data()         
+                #new_song= Data(title,interpret,fingerprint)
+                #new_song.store_data()         
                 st.write("upload complete")    
                 os.remove(file_path)
                 st.rerun()
@@ -99,12 +104,28 @@ with tab1:
 with tab2:
     st.write("Erkennen")
 
-    with st.form ("erkennen"):
-        uploaded_song = st.file_uploader("Choose a file")
+    with st.form("recognize_song"):
+        uploaded_song = st.file_uploader("Wählen Sie eine Datei aus")
         if uploaded_song is not None:
-            #fingerprint erstellen und ablegen in der datenbank
-            st.write("file ausgewählt")
+            st.write("Datei ausgewählt:", uploaded_song.name)
 
-        submitted = st.form_submit_button("Submit")
-        if submitted:
-            AudioFingerprinter.fingerprint_file(uploaded_song)
+        submitted = st.form_submit_button("Song erkennen")
+        if submitted and uploaded_song:
+            # Überprüfen, ob der hochgeladene Song in der Datenbank ist
+            recognizer = SongRecognizer("shazam/database.json")
+            # Speichern der hochgeladenen Datei temporär, um sie an den SongRecognizer zu übergeben
+            temp_file_path = "temp_file." + uploaded_song.name.split(".")[-1]
+            with open(temp_file_path, "wb") as f:
+                f.write(uploaded_song.getvalue())
+            # Erkennen des Songs
+            recognition_result = recognizer.recognise_song(temp_file_path)
+            # Löschen der temporären Datei
+            os.remove(temp_file_path)
+            # Überprüfen, ob ein Ergebnis vorliegt
+            if recognition_result is not None:
+                st.write("Der hochgeladene Song wurde erkannt!")
+                st.write("Künstler:", recognition_result[0])
+                st.write("Album:", recognition_result[1])
+                st.write("Titel:", recognition_result[2])
+            else:
+                st.write("Der hochgeladene Song wurde nicht in der Datenbank gefunden.")
