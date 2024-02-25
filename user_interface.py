@@ -3,6 +3,7 @@ import streamlit as st
 from duckduckgo_search import DDGS
 import io
 import requests
+from recognise import SongRecognizer
 from PIL import Image
 from Store_Data import Data
 from Fingerprint import AudioFingerprinter
