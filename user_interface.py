@@ -89,16 +89,31 @@ with tab1:
 
     
 
-
 with tab2:
     st.write("Erkennen")
 
-    with st.form ("fingerprint test"):
-        uploaded_song = st.file_uploader("Choose a file")
+    with st.form("recognize_song"):
+        uploaded_song = st.file_uploader("Wählen Sie eine Datei aus")
         if uploaded_song is not None:
-            #fingerprint erstellen und ablegen in der datenbank
-            st.write("file ausgewählt")
+            st.write("Datei ausgewählt:", uploaded_song.name)
 
-        submitted = st.form_submit_button("Submit")
-        if submitted:
-            AudioFingerprinter.fingerprint_file(uploaded_song)
+        submitted = st.form_submit_button("Song erkennen")
+        if submitted and uploaded_song:
+            # Überprüfen, ob der hochgeladene Song in der Datenbank ist
+            recognizer = SongRecognizer()
+            # Speichern der hochgeladenen Datei temporär, um sie an den SongRecognizer zu übergeben
+            temp_file_path = "temp_file." + uploaded_song.name.split(".")[-1]
+            with open(temp_file_path, "wb") as f:
+                f.write(uploaded_song.getvalue())
+            # Erkennen des Songs
+            recognition_result = recognizer.recognise_song(temp_file_path)
+            # Löschen der temporären Datei
+            os.remove(temp_file_path)
+            # Überprüfen, ob ein Ergebnis vorliegt
+            if recognition_result is not None:
+                st.write("Der hochgeladene Song wurde erkannt!")
+                st.write("Künstler:", recognition_result[0])
+                st.write("Album:", recognition_result[1])
+                st.write("Titel:", recognition_result[2])
+            else:
+                st.write("Der hochgeladene Song wurde nicht in der Datenbank gefunden.")
