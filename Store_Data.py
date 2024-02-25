@@ -6,13 +6,14 @@ from serializer import serializer
 class Data ():
     db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('Songs')
 
-    def __init__ (self, song_name : str, interpret : str):
+    def __init__ (self, song_name : str, interpret : str, fingerprint):
         self.song_name = song_name
         self.interpret = interpret
+        self.fingerprint = fingerprint
         self.is_active = True
 
     def __str__(self):
-            return f'Device {self.song_name} ({self.interpret})'
+            return f'Device {self.song_name} ({self.interpret})({self.fingerprint})'
 
     def __repr__(self):
             return self.__str__()
