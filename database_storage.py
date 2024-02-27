@@ -22,13 +22,12 @@ class AudioDatabase:
         if len(hashes) < 1:
             return
 
-        song_id = str(uuid.uuid5(uuid.NAMESPACE_OID, song_info[2]).int)  
+        song_id = str(uuid.uuid5(uuid.NAMESPACE_OID, song_info[1]).int)  
         hash_entries = [{'hash': h[0], 'offset': h[1], 'song_id': song_id} for h in hashes]
         self.db.table('hash').insert_multiple(hash_entries)
 
-        song_info_entry = {'artist': song_info[0] or "Unknown",
-                           'album': song_info[1] or "Unknown",
-                           'title': song_info[2] or "Unknown",
+        song_info_entry = {'artist': song_info[0] or "Unknown",                           
+                           'title': song_info[1] or "Unknown",
                            'song_id': song_id}
         self.db.table('song_info').insert(song_info_entry)
 
@@ -52,8 +51,11 @@ class AudioDatabase:
             # Überprüfen Sie, ob die Anzahl der Übereinstimmungen über dem Schwellenwert liegt
             for song_id, count in song_id_count.items():
                 if count >= threshold:
-                    artist, album, title = self.get_info_for_song_id(song_id)
-                    matches[song_id] = (artist, album, title, count)
+                    song_info = self.get_info_for_song_id(song_id)
+                    if song_info is not None:
+                        artist = song_info['artist']
+                        title = song_info['title']
+                        matches[song_id] = (artist, title, count)
 
         return matches
 
@@ -65,8 +67,5 @@ class AudioDatabase:
 
         if song_info is None:
             return None
-
-        print (song_info['artist'])
-        print (song_info['album'])
-        print (song_info['title'])
-        return song_info['artist'], song_info['album'], song_info['title']
+        
+        return song_info 

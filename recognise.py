@@ -80,7 +80,7 @@ class SongRecognizer:
             return None
 
         # Find the song with the most offsets
-        best_match = max(matches, key=lambda k: matches[k][3])
+        best_match = max(matches, key=lambda k: matches[k][2])
 
         return best_match, matches[best_match]
     """

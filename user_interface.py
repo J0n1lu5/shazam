@@ -30,8 +30,8 @@ with tab1:
 
             st.write("file ausgewählt")
 
-        title = st.text_input("# Title")
-        interpret = st.text_input("# Interpret")
+        title = st.text_input("Title")
+        interpret = st.text_input("Interpret")
 
         submitted = st.form_submit_button("Submit")
 
@@ -43,7 +43,7 @@ with tab1:
                 f.write(uploaded_song.getvalue())
             
 
-            song_info = f"{title},{interpret}"
+            song_info = title,interpret
             fingerprinter_instance = AudioFingerprinter()
             fingerprint = fingerprinter_instance.fingerprint_file(file_path)
             new_song = AudioDatabase("database.json")
@@ -72,13 +72,13 @@ with tab2:
         if submitted and uploaded_song:
             recognizer = SongRecognizer("database.json")
             recognition_result = recognizer.recognise_song(file_path)
+            print(recognition_result)
             os.remove(file_path)
 
             if recognition_result is not None:
                 st.write("Der hochgeladene Song wurde erkannt!")
-                st.write("Künstler:", recognition_result[0])
-                st.write("Album:", recognition_result[1])
-                st.write("Titel:", recognition_result[2])
+                st.write("Künstler:", recognition_result[1][1])
+                st.write("Titel:", recognition_result[1][0])
             else:
                 st.write("Der hochgeladene Song wurde nicht in der Datenbank gefunden.")
 
