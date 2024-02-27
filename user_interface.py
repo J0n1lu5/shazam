@@ -58,27 +58,68 @@ with tab2:
     with st.form("recognize_song"):
         uploaded_song = st.file_uploader("Wählen Sie eine Datei aus")
 
-        if uploaded_song is not None:
+        if uploaded_song is not None:            
+
+            st.write("Datei ausgewählt:", uploaded_song.name)
+
+        submitted = st.form_submit_button("Song erkennen")
+
+        show_cover = st.checkbox("Cover anzeigen")
+
+        if show_cover :
+                st.write("Cover wird mit gesucht")
+        
+        if submitted and uploaded_song:
             file_path = os.path.join(os.getcwd(), uploaded_song.name)
 
             with open(file_path, 'wb') as f:
                 
                     f.write(uploaded_song.getvalue())
 
-            st.write("Datei ausgewählt:", uploaded_song.name)
-
-        submitted = st.form_submit_button("Song erkennen")
-
-        if submitted and uploaded_song:
             recognizer = SongRecognizer("database.json")
             recognition_result = recognizer.recognise_song(file_path)
-            print(recognition_result)
+            #print(recognition_result)
             os.remove(file_path)
 
             if recognition_result is not None:
                 st.write("Der hochgeladene Song wurde erkannt!")
                 st.write("Künstler:", recognition_result[1][1])
                 st.write("Titel:", recognition_result[1][0])
+                
+                if show_cover:
+                    
+                    if title and interpret is not None:
+                        with DDGS() as ddgs:
+                            keywords = f"{recognition_result[1][0]} {recognition_result[1][1]} album cover"
+                            ddgs_images_gen = ddgs.images(
+                                keywords,
+                                region="wt-wt",
+                                safesearch="off",
+                                size=None,
+                                color="",
+                                type_image=None,
+                                layout=None,
+                                license_image=None,
+                                max_results=1,
+                            )
+                            images = list(ddgs_images_gen)
+                            if images:
+                                image_url = images[0].get('image')
+                                if image_url:
+                                    # Fetch the image data
+                                    response = requests.get(image_url)
+                                    image_bytes_io = io.BytesIO(response.content)
+                                    
+                                    # Open the image using PIL
+                                    pil_image = Image.open(image_bytes_io)
+                                    
+                                    # Display the image in Streamlit
+                                    st.image(pil_image, caption='Album Cover', use_column_width=True)
+                                else:
+                                    st.write("Album Cover URL nicht gefunden.")
+                            else:
+                                st.write("Album Cover nicht gefunden.")
+
             else:
                 st.write("Der hochgeladene Song wurde nicht in der Datenbank gefunden.")
 
