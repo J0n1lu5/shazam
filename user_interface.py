@@ -26,19 +26,23 @@ with tab1:
         uploaded_song = st.file_uploader("Choose a file", type=['wav'])
 
         if uploaded_song is not None:
-            file_path = os.path.join(os.getcwd(), uploaded_song.name)
-
-            with open(file_path, 'wb') as f:
-                f.write(uploaded_song.getvalue())
+            
 
             st.write("file ausgewählt")
 
-            title = st.text_input("# Title")
-            interpret = st.text_input("# Interpret")
+        title = st.text_input("# Title")
+        interpret = st.text_input("# Interpret")
 
         submitted = st.form_submit_button("Submit")
 
         if submitted:
+            
+            file_path = os.path.join(os.getcwd(), uploaded_song.name)
+
+            with open(file_path, 'wb') as f:
+                f.write(uploaded_song.getvalue())
+            
+
             song_info = f"{title},{interpret}"
             fingerprinter_instance = AudioFingerprinter()
             fingerprint = fingerprinter_instance.fingerprint_file(file_path)
@@ -46,7 +50,7 @@ with tab1:
             new_song.store_song(fingerprint, song_info)
             st.write("upload complete")
             os.remove(file_path)
-            st.experimental_rerun()
+            st.rerun()
 
 with tab2:
     st.write("Erkennen")

@@ -36,19 +36,34 @@ class AudioDatabase:
         hash_values = [h[0] for h in hashes]
         results = self.db.table('hash').search(Query().hash.one_of(hash_values))
 
-        h_dict = {h[0]: h[1] for h in hashes}
+        # Erstellen Sie ein Dictionary, um die Ergebnisse zu speichern
         result_dict = defaultdict(list)
         for r in results:
-            result_dict[r['song_id']].append((r['offset'], h_dict[r['hash']]))
+            # Verwenden Sie den hash-Wert als Schlüssel für das Dictionary
+            result_dict[r['hash']].append((r['offset'], r['song_id']))
 
-        matches = []
-        for song_id, offsets in result_dict.items():
-            artist, album, title = self.get_info_for_song_id(song_id)
-            matches.append((song_id, artist, album, title, len(offsets)))
+        matches = {}
+        for hash_value, song_offsets in result_dict.items():
+            # Iterieren Sie über die Song-Offsets und zählen Sie die Anzahl der Übereinstimmungen
+            song_id_count = defaultdict(int)
+            for offset, song_id in song_offsets:
+                song_id_count[song_id] += 1
+
+            # Überprüfen Sie, ob die Anzahl der Übereinstimmungen über dem Schwellenwert liegt
+            for song_id, count in song_id_count.items():
+                if count >= threshold:
+                    artist, album, title = self.get_info_for_song_id(song_id)
+                    matches[song_id] = (artist, album, title, count)
+
+        return matches
 
         return matches
 
     def get_info_for_song_id(self, song_id):
         Song = Query()
         song_info = self.db.table('song_info').get(Song.song_id == song_id)
+
+        if song_info is None:
+            return None
+
         return song_info['artist'], song_info['album'], song_info['title']

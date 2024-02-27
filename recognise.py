@@ -73,9 +73,19 @@ class SongRecognizer:
                                               int(max(tks)) + binwidth + 1,
                                               binwidth))
         return np.max(hist)
-
+    """
     def best_match(self, matches):
-        """For a dictionary of song_id: offsets, returns the best song_id."""
+        if not matches:
+            return None
+
+        # Find the song with the most offsets
+        best_match = max(matches, key=lambda k: matches[k][3])
+
+        return best_match, matches[best_match]
+    """
+    
+    def best_match(self, matches):
+        #For a dictionary of song_id: offsets, returns the best song_id.
         matched_song = None
         best_score = 0
         for song_id, offsets in matches.items():
@@ -86,12 +96,15 @@ class SongRecognizer:
                 best_score = score
                 matched_song = song_id
         return matched_song
+    
 
     def recognise_song(self, filename):
         """Recognises a pre-recorded sample."""
         hashes = self.fingerprint_file(filename)
         matches = self.db.get_matches(hashes)
         matched_song = self.best_match(matches)
+        if matched_song is None:
+            return None
         info = self.db.get_info_for_song_id(matched_song)
         if info is not None:
             return info
@@ -117,3 +130,4 @@ class SongRecognizer:
         """Generate hashes for a series of audio frames."""
         fingerprinter = AudioFingerprinter()
         return fingerprinter.fingerprint_audio(frames)
+
