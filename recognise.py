@@ -67,13 +67,14 @@ class SongRecognizer:
     def score_match(self, offsets):
         """Score a matched song."""
         binwidth = 0.5
+        print("Offsets:", offsets)  # Print offsets for debugging
         tks = list(map(lambda x: x[0] - x[1], offsets))
         hist, _ = np.histogram(tks,
                                bins=np.arange(int(min(tks)),
                                               int(max(tks)) + binwidth + 1,
                                               binwidth))
         return np.max(hist)
-    """
+    
     def best_match(self, matches):
         if not matches:
             return None
@@ -96,7 +97,7 @@ class SongRecognizer:
                 best_score = score
                 matched_song = song_id
         return matched_song
-    
+    """
 
     def recognise_song(self, filename):
         """Recognises a pre-recorded sample."""

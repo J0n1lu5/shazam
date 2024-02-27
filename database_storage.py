@@ -57,7 +57,7 @@ class AudioDatabase:
 
         return matches
 
-        return matches
+        
 
     def get_info_for_song_id(self, song_id):
         Song = Query()
@@ -66,4 +66,7 @@ class AudioDatabase:
         if song_info is None:
             return None
 
+        print (song_info['artist'])
+        print (song_info['album'])
+        print (song_info['title'])
         return song_info['artist'], song_info['album'], song_info['title']
