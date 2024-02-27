@@ -9,19 +9,20 @@ class AudioDatabase:
 
     def setup_db(self):
         # Create tables if they don't exist
-        self.db.create_table('hash')
-        self.db.create_table('song_info')
+        self.db.table('hash')
+        self.db.table('song_info')
 
-    def song_in_db(self, filename):
+    def song_in_db(self, hashes):
         Song = Query()
-        song_id = str(uuid.uuid5(uuid.NAMESPACE_OID, filename).int)
+        song_id = str(uuid.uuid5(uuid.NAMESPACE_OID, hashes[0][2]).int)  
         return bool(self.db.table('song_info').search(Song.song_id == song_id))
+
 
     def store_song(self, hashes, song_info):
         if len(hashes) < 1:
             return
 
-        song_id = str(uuid.uuid5(uuid.NAMESPACE_OID, song_info[2]).int)  # Using title as filename for simplicity
+        song_id = str(uuid.uuid5(uuid.NAMESPACE_OID, song_info[2]).int)  
         hash_entries = [{'hash': h[0], 'offset': h[1], 'song_id': song_id} for h in hashes]
         self.db.table('hash').insert_multiple(hash_entries)
 
@@ -40,7 +41,12 @@ class AudioDatabase:
         for r in results:
             result_dict[r['song_id']].append((r['offset'], h_dict[r['hash']]))
 
-        return result_dict
+        matches = []
+        for song_id, offsets in result_dict.items():
+            artist, album, title = self.get_info_for_song_id(song_id)
+            matches.append((song_id, artist, album, title, len(offsets)))
+
+        return matches
 
     def get_info_for_song_id(self, song_id):
         Song = Query()
