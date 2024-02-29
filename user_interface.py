@@ -88,6 +88,9 @@ with tab2:
                 # Spotify-Link generieren
                 spotify_link = f"https://open.spotify.com/search/{recognition_result[1][0].replace(' ', '_')}+{recognition_result[1][1].replace(' ', '_')}"
                 st.write("Spotify Link:", spotify_link)
+                youtube_link = f"https://www.youtube.com/results?search_query={recognition_result[1][0].replace(' ', '_')}+{recognition_result[1][1].replace(' ', '_')}"
+                st.write("YouTube Link:", youtube_link)
+
 
 
                 if show_cover:
