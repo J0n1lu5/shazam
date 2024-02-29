@@ -85,7 +85,11 @@ with tab2:
                 st.write("Der hochgeladene Song wurde erkannt!")
                 st.write("Künstler:", recognition_result[1][1])
                 st.write("Titel:", recognition_result[1][0])
-                
+                # Spotify-Link generieren
+                spotify_link = f"https://open.spotify.com/search/{recognition_result[1][0].replace(' ', '_')}+{recognition_result[1][1].replace(' ', '_')}"
+                st.write("Spotify Link:", spotify_link)
+
+
                 if show_cover:
                     
                     if title and interpret is not None:
