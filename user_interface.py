@@ -7,6 +7,7 @@ from recognise import SongRecognizer
 from PIL import Image
 from Store_Data import Data
 from Fingerprint import AudioFingerprinter
+from audio_player import AudioPlayer
 import os
 import tempfile
 import numpy as np
@@ -15,6 +16,7 @@ from database_storage import AudioDatabase
 
 # Eine Überschrift der ersten Ebene
 st.write("Musikerkennung")
+
 
 # tabs
 tab1, tab2 = st.tabs(["Hochladen", "Erkennen"])
@@ -29,6 +31,7 @@ with tab1:
             
 
             st.write("file ausgewählt")
+            AudioPlayer.play_audio(uploaded_song)
 
         title = st.text_input("Title")
         interpret = st.text_input("Interpret")
