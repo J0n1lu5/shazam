@@ -1,20 +1,32 @@
-
 import streamlit as st
 from duckduckgo_search import DDGS
 import io
 import requests
 from recognise import SongRecognizer
 from PIL import Image
-from Store_Data import Data
 from Fingerprint import AudioFingerprinter
 from audio_player import AudioPlayer
 import os
-import tempfile
 import numpy as np
-import settings
 from database_storage import AudioDatabase
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
+
+def plot_waveform(file_path):
+    sample_rate, audio_data = wavfile.read(file_path)
+
+    # Bestimme die Zeitachse
+    duration = len(audio_data) / sample_rate
+    time_axis = np.linspace(0, duration, len(audio_data))
+
+    # Plotte die Wellenform
+    plt.figure(figsize=(10, 4))
+    plt.plot(time_axis, audio_data, color='blue')
+    plt.title('Wellenform des Songs')
+    plt.xlabel('Zeit (s)')
+    plt.ylabel('Amplitude')
+    plt.grid(True)
+    st.pyplot(plt)
 
 
 # Eine Überschrift der ersten Ebene
@@ -51,15 +63,26 @@ with tab1:
                 f.write(uploaded_song.getvalue())
             
 
-            song_info = title,interpret
             fingerprinter_instance = AudioFingerprinter()
             fingerprint = fingerprinter_instance.fingerprint_file(file_path)
+            
+            song_info = title,interpret
             new_song = AudioDatabase("database.json")
             new_song.store_song(fingerprint, song_info)
             st.write("upload complete")
-            os.remove(file_path)
-            st.rerun()
 
+            if show_waveform:
+                plot_waveform(file_path)
+
+            os.remove(file_path)
+            
+            
+
+            
+                   
+
+            
+        
 
     
 
@@ -161,23 +184,3 @@ with tab2:
             recent_songs = database.get_history(limit)
             st.write("Die letzten gesuchten Songs sind")
             st.write (recent_songs)
-"""
-with st.sidebar:
-    st.write("Wellenfunktion Parameter")
-    uploaded_song = st.file_uploader("WAV-Datei hochladen", type=['wav'])
-
-if show_waveform:
-    # Audiodatei einlesen
-    fs, data = wavfile.read(uploaded_song)
-    
-    # Zeitvektor erstellen
-    time = np.arange(0, len(data)) / fs
-    
-    # Plot erstellen
-    plt.plot(time, data)
-    plt.xlabel('Zeit (s)')
-    plt.ylabel('Amplitude')
-    plt.title('Waveform des Songs')
-    st.pyplot(plt)
-"""
-
