@@ -30,5 +30,28 @@ In beiden Tabs können die Songs, die hochgeladen wurden, abgespielt werden und 
 
 Außerdem wurde eine Song-History hinzugefügt. Diese kann über einen Button angezeigt werden. Es werden die letzten fünf erkannten Songs angezeigt.
 
-## Instalation
+## Installation
 
+1. Klonen Sie dieses Repository:
+
+    ```bash
+    git clone https://github.com/J0n1lu5/shazam
+    ```
+
+2. Wechseln Sie in das Verzeichnis:
+
+    ```bash
+    cd shazam
+    ```
+
+3. Installieren Sie die erforderlichen Pakete:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. Starten sie Streamlit um die Benutzeroberfläche zu starten:
+
+    ```bash
+    streamlit run user_interface.py
+    ```
