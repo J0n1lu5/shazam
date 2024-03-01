@@ -3,9 +3,9 @@
 ## Inhalt
 
 1. [Intro](#intro)
-2. [Funktionsweise] (#funktionsweise)
-3. [Erweiterungen] (#erweiterungen)
-4. [Installation] (#installation)
+2. [Funktionsweise](#funktionsweise)
+3. [Erweiterungen](#erweiterungen)
+4. [Installation](#installation)
 
 
 ## Intro
@@ -31,5 +31,4 @@ In beiden Tabs können die Songs, die hochgeladen wurden, abgespielt werden und 
 Außerdem wurde eine Song-History hinzugefügt. Diese kann über einen Button angezeigt werden. Es werden die letzten fünf erkannten Songs angezeigt.
 
 ## Instalation
-
 
