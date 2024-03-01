@@ -1,29 +1,35 @@
-# shazam
-Unsere Anwendung kann in folgende Hauptpunkte aufgeteilt werden. 
+# Softwaredesign Abschlussprojekt
 
-Fingerabdruck: Die Erstellung eines Fingerabdrucks beginnt mit der Berechnung des Spektrogramms des Songs oder Audios. Anschließend werden Spitzen im Spektrogramm identifiziert, die die lautesten Frequenzen repräsentieren. Diese Spitzen werden gepaart, um einzigartige Hashes zu erstellen, die den Fingerabdruck des Songs bilden. Diese Hashes werden dann in der Datenbank gespeichert.
+## Inhalt
 
-Erkenner: Der Erkenner berechnet zunächst einen Fingerabdruck des eingegebenen Audio-Samples. Anschließend sucht er nach übereinstimmenden Hashes in der Datenbank und gruppiert diese nach Song. Die Übereinstimmung jedes potenziellen Songs wird anhand der zeitlichen Ausrichtung der Hashes bewertet. Der Song mit der höchsten Übereinstimmung wird als wahrscheinlichste Identifizierung des Audio-Samples ausgewählt.
+1. [Intro](#intro)
+2. [Funktionsweise] (#funktionsweise)
+3. [Erweiterungen] (#erweiterungen)
+4. [Installation] (#installation)
 
-Streamlit-Benutzeroberfläche: Die Streamlit-Benutzeroberfläche wurde entwickelt, um die Anwendung nutzerfreundlich zu gestalten. Sie ermöglicht es Benutzern, Audio-Samples aufzunehmen und mit dem Erkenner zu interagieren. Die Benutzeroberfläche zeigt die Ergebnisse der Song-Identifizierung an und erleichtert die Navigation durch die Anwendung.
 
-Datenbank: Die Datenbank dient zur effizienten Speicherung von Fingerabdrücken und zugehörigen Metadaten. Sie ist so strukturiert, dass Fingerabdrücke schnell und effizient abgerufen werden können. Die Datenbank unterstützt Funktionen wie das Hinzufügen, Aktualisieren und Löschen von Fingerabdrücken und gewährleistet die Skalierbarkeit und Leistungsfähigkeit für den Betrieb mit großen Datenmengen.
+## Intro
+In diesem Programm wird eine beispielhafte Programmierung von Shazam nachgestellt. Dabei können ganze Songtitel hochgeladen werden. Aus diesen hochgeladenen Songs können dann in einem weiteren Tab kürzere Songsequenzen hochgeladen werden, die dann über den song-spezifischen Fingerabdruck erkannt werden.  
+## Funktionsweise
+Das Programm gliedert sich in mehrere Abschnitte. Zunächst wird beim Hochladen eines Songs ein Fingerprint erstellt. Die Erstellung des Fingerprints beginnt mit der Berechnung des Spektrogramms des Songs. Anschließend werden die Peaks im Spektrogramm identifiziert, die die lautesten Frequenzen repräsentieren. Diese Peaks werden gepaart, um eindeutige Hashes zu erstellen, die den Fingerabdruck des Songs bilden. Diese Hashes werden in der Datenbank gespeichert.
 
-Hiermit werden die Grundvoraussetzungen für das Projekt erfüllt. Neben diese haben wir das Projekt noch mit folgenden Punkten erweitert:
+Die Datenbank dient nicht nur der effizienten Speicherung von Fingerabdrücken und zugehörigen Metadaten. Sie ist so strukturiert, dass Fingerprints schnell und effizient abgerufen werden können. Die Datenbank unterstützt Funktionen wie das Hinzufügen, Aktualisieren und Löschen von Fingerabdrücken und gewährleistet die Skalierbarkeit und Leistungsfähigkeit für den Betrieb mit großen Datenmengen.
 
-1.	Erstellung von Links
-   
-Wenn ein gesuchter Song gefunden wird, werden in Streamlit zwei Links angezeigt. Einer führt den Nutzer auf den gefundenen Song auf Spotify und der andere führt zum gefundenen Song auf YouTube.
+Wird nun im zweiten Tab eine kürzere Song-Sequenz hochgeladen, wird diese in den Recognicer eingelesen und die Funktion erstellt einen Fingerabdruck für diese Sequenz. Anschließend sucht der Recognicer in der Datenbank nach übereinstimmenden Hashes und gruppiert diese nach Songs. Die Übereinstimmung jedes potentiellen Songs wird anhand der zeitlichen Ausrichtung der Hashes bewertet. Der Song mit der höchsten Übereinstimmung wird als wahrscheinlichste Identifikation des Audiosamples ausgewählt.
 
-2.	Albumcover
-   
-Wenn man in Streamlit einen Song sucht, kann man wählen, ob ein Cover angezeigt werden soll oder nicht. Wenn man dies will, wird mit Hilfe von DuckDuckGo ein Song-Cover angezeigt, wenn der Song gefunden wird.
+Mit Hilfe von Streamlit wurde eine Benutzeroberfläche erstellt. Die Streamlit-Benutzeroberfläche wurde entwickelt, um die Anwendung benutzerfreundlich zu gestalten. Sie ermöglicht es dem Benutzer, Audiosamples aufzunehmen und mit dem Erkenner zu interagieren. Die Benutzeroberfläche zeigt die Ergebnisse der Song-Identifikation an und erleichtert die Navigation durch die Anwendung.
 
-3.	Waveform hinzugefügt
-   
-In Streamlit wird die Waveform des hochgeladenen Songs geplottet und grafisch dargestellt.
+## Erweiterungen
+Neben den genannten Mindestanforderungen wurden weitere Ergänzungen implementiert. Als erste Erweiterung wurde eine Funktion hinzugefügt, die zu den erkannten Songs entsprechende Links für Spotify und Youtube ausgibt.
 
-4.	Gesuchten Song abspielen
-   
-Der gesuchte Song, den man auf Streamlit in der Tab2 hochgeladen hat, kann nun auch abgespielt werden, wie der Hochgeladene in der Tab1.
+Eine weitere Erweiterung ist die Erstellung eines Covers des erkannten Songs. Dies wurde mit Hilfe von DuckDuckGo umgesetzt. Über Streamlit kann man dann auswählen, ob das Cover angezeigt werden soll oder nicht. Dies kann über eine Checkbox aktiviert oder deaktiviert werden.
+
+Als nächste zusätzliche Implementierung wird noch die Waveform erstellt und ebenfalls über ein Auswahlkästchen grafisch dargestellt oder nicht. Die Waveform ist der Lautstärkeverlauf eines Songs.
+
+In beiden Tabs können die Songs, die hochgeladen wurden, abgespielt werden und sorgen so für eine angenehmere und interessantere Bedienung des Interfaces.
+
+Außerdem wurde eine Song-History hinzugefügt. Diese kann über einen Button angezeigt werden. Es werden die letzten fünf erkannten Songs angezeigt.
+
+## Instalation
+
 
