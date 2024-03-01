@@ -19,6 +19,8 @@ st.write("Musikerkennung")
 # tabs
 tab1, tab2 = st.tabs(["Hochladen", "Erkennen"])
 
+search_history = []
+
 with tab1:
     st.write("Hochladen")
 
@@ -65,6 +67,8 @@ with tab2:
         submitted = st.form_submit_button("Song erkennen")
 
         show_cover = st.checkbox("Cover anzeigen")
+        show_search_history = st.checkbox("Verlauf anzeigen")
+        
 
         if show_cover :
                 st.write("Cover wird mit gesucht")
@@ -85,7 +89,13 @@ with tab2:
                 st.write("Der hochgeladene Song wurde erkannt!")
                 st.write("Künstler:", recognition_result[1][1])
                 st.write("Titel:", recognition_result[1][0])
+                search_history.append((recognition_result[1][0],recognition_result[1][1]))
                 
+                if show_search_history:
+                    st.write("Letzte Suchanfragen")
+                    st.write(search_history)
+
+
                 if show_cover:
                     
                     if title and interpret is not None:
