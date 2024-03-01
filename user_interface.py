@@ -13,6 +13,8 @@ import tempfile
 import numpy as np
 import settings
 from database_storage import AudioDatabase
+import matplotlib.pyplot as plt
+from scipy.io import wavfile
 
 
 # Eine Überschrift der ersten Ebene
@@ -55,6 +57,8 @@ with tab1:
             st.write("upload complete")
             os.remove(file_path)
             st.rerun()
+
+    
 
 with tab2:
     st.write("Erkennen")
@@ -134,6 +138,25 @@ with tab2:
 
             else:
                 st.write("Der hochgeladene Song wurde nicht in der Datenbank gefunden.")
+
+with st.sidebar:
+    st.write("Wellenfunktion Parameter")
+    uploaded_song = st.file_uploader("WAV-Datei hochladen", type=['wav'])
+
+if uploaded_song:
+    # Audiodatei einlesen
+    fs, data = wavfile.read(uploaded_song)
+    
+    # Zeitvektor erstellen
+    time = np.arange(0, len(data)) / fs
+    
+    # Plot erstellen
+    plt.plot(time, data)
+    plt.xlabel('Zeit (s)')
+    plt.ylabel('Amplitude')
+    plt.title('Waveform des Songs')
+    st.pyplot(plt)
+
 
 """      
     if title and interpret is not None:
