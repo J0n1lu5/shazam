@@ -14,6 +14,7 @@ import numpy as np
 import settings
 from database_storage import AudioDatabase
 
+
 # Eine Überschrift der ersten Ebene
 st.write("Musikerkennung")
 
@@ -85,6 +86,7 @@ with tab2:
             os.remove(file_path)
 
             if recognition_result is not None:
+                st.audio(uploaded_song)
                 st.write("Der hochgeladene Song wurde erkannt!")
                 st.write("Künstler:", recognition_result[1][1])
                 st.write("Titel:", recognition_result[1][0])
@@ -94,7 +96,7 @@ with tab2:
                 youtube_link = f"https://www.youtube.com/results?search_query={recognition_result[1][0].replace(' ', '_')}+{recognition_result[1][1].replace(' ', '_')}"
                 st.write("YouTube Link:", youtube_link)
 
-
+                
 
                 if show_cover:
                     
