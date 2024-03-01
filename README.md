@@ -6,7 +6,7 @@
 2. [Funktionsweise](#funktionsweise)
 3. [Erweiterungen](#erweiterungen)
 4. [Installation](#installation)
-
+5. [UML Diagramm](#uml-diagramm)
 
 ## Intro
 In diesem Programm wird eine beispielhafte Programmierung von Shazam nachgestellt. Dabei können ganze Songtitel hochgeladen werden. Aus diesen hochgeladenen Songs können dann in einem weiteren Tab kürzere Songsequenzen hochgeladen werden, die dann über den song-spezifischen Fingerabdruck erkannt werden.  
@@ -55,3 +55,7 @@ Außerdem wurde eine Song-History hinzugefügt. Diese kann über einen Button an
     ```bash
     streamlit run user_interface.py
     ```
+
+
+# UML Diagramm
+![UML-Diagramm](https://github.com/timhornikel/shazam/UML-1.png)
