@@ -33,13 +33,13 @@ with tab1:
         uploaded_song = st.file_uploader("Choose a file", type=['wav'])
 
         if uploaded_song is not None:
-            
 
             st.write("file ausgewählt")
             AudioPlayer.play_audio(uploaded_song)
 
         title = st.text_input("Title")
         interpret = st.text_input("Interpret")
+        show_waveform = st.checkbox("Waveform anzeigen")
 
         submitted = st.form_submit_button("Submit")
 
@@ -59,6 +59,7 @@ with tab1:
             st.write("upload complete")
             os.remove(file_path)
             st.rerun()
+
 
     
 
@@ -98,11 +99,10 @@ with tab2:
                 st.write("Der hochgeladene Song wurde erkannt!")
                 st.write("Künstler:", recognition_result[1][1])
                 st.write("Titel:", recognition_result[1][0])
-                search_history.append((recognition_result[1][0],recognition_result[1][1]))
                 
-                if show_search_history:
-                    st.write("Letzte Suchanfragen")
-                    st.write(search_history)
+                song_data = {"artist": recognition_result[1][1], "title": recognition_result[1][0]} 
+                history = AudioDatabase("database.json")
+                history.store_history(song_data)
 
                 # Spotify-Link generieren
                 spotify_link = f"https://open.spotify.com/search/{recognition_result[1][0].replace(' ', '_')}+{recognition_result[1][1].replace(' ', '_')}"
@@ -111,7 +111,7 @@ with tab2:
                 st.write("YouTube Link:", youtube_link)
 
                 
-
+                #Albumcover
                 if show_cover:
                     
                     if title and interpret is not None:
@@ -134,26 +134,39 @@ with tab2:
                                 if image_url:
                                     # Fetch the image data
                                     response = requests.get(image_url)
-                                    image_bytes_io = io.BytesIO(response.content)
                                     
-                                    # Open the image using PIL
-                                    pil_image = Image.open(image_bytes_io)
-                                    
-                                    # Display the image in Streamlit
-                                    st.image(pil_image, caption='Album Cover', use_column_width=True)
+                                    if response.status_code == 200:
+                                        try:
+                                            # Open the image using PIL
+                                            pil_image = Image.open(io.BytesIO(response.content))
+                                            
+                                            # Display the image in Streamlit
+                                            st.image(pil_image, caption='Album Cover', use_column_width=True)
+                                        except Exception as e:
+                                            st.write("Error:", e)
+                                            st.write("Album Cover kann nicht geöffnet werden.")
+                                    else:
+                                        st.write("Album Cover kann nicht abgerufen werden:", image_url)
                                 else:
                                     st.write("Album Cover URL nicht gefunden.")
                             else:
-                                st.write("Album Cover nicht gefunden.")
+                                st.write("Album Cover nicht  gefunden.")
 
             else:
                 st.write("Der hochgeladene Song wurde nicht in der Datenbank gefunden.")
 
+        if show_search_history:
+            limit = 5
+            database = AudioDatabase("database.json")
+            recent_songs = database.get_history(limit)
+            st.write("Die letzten gesuchten Songs sind")
+            st.write (recent_songs)
+"""
 with st.sidebar:
     st.write("Wellenfunktion Parameter")
     uploaded_song = st.file_uploader("WAV-Datei hochladen", type=['wav'])
 
-if uploaded_song:
+if show_waveform:
     # Audiodatei einlesen
     fs, data = wavfile.read(uploaded_song)
     
@@ -166,5 +179,5 @@ if uploaded_song:
     plt.ylabel('Amplitude')
     plt.title('Waveform des Songs')
     st.pyplot(plt)
-
+"""
 

@@ -11,6 +11,7 @@ class AudioDatabase:
         # Create tables if they don't exist
         self.db.table('hash')
         self.db.table('song_info')
+        self.db.table('search_history')
 
     def song_in_db(self, hashes):
         Song = Query()
@@ -26,8 +27,8 @@ class AudioDatabase:
         hash_entries = [{'hash': h[0], 'offset': h[1], 'song_id': song_id} for h in hashes]
         self.db.table('hash').insert_multiple(hash_entries)
 
-        song_info_entry = {'artist': song_info[0] or "Unknown",                           
-                           'title': song_info[1] or "Unknown",
+        song_info_entry = {'title': song_info[0] or "Unknown",                           
+                           'artist': song_info[1] or "Unknown",
                            'song_id': song_id}
         self.db.table('song_info').insert(song_info_entry)
 
@@ -69,3 +70,21 @@ class AudioDatabase:
             return None
         
         return song_info 
+    
+
+    def store_history(self,song_info):
+        
+        #song_info = {'title': song_info[0],'artist': song_info[1]}
+        self.db.table('search_history').insert(song_info)
+
+    def get_history(self,limit):
+        # Abrufen der letzten erkannten Songs nach Einfügezeitpunktsortiert
+        recent_songs = self.db.table('search_history').all()
+        recent_songs.sort(key=lambda x: x.doc_id, reverse=True)  # Sortieren nach Einfügezeitpunkt (doc_id)
+
+        # Begrenzen der Anzahl der zurückgegebenen Songs auf 'limit'
+        
+        recent_songs = recent_songs[:limit]
+
+        # Rückgabe der Liste der zuletzt erkannten Songs
+        return recent_songs
