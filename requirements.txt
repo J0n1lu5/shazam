@@ -1,0 +1,11 @@
+pydub
+numpy
+scipy
+tinydb
+tinydb-serialization
+tinytag
+streamlit
+duckduckgo_search
+Pillow
+requests
+matplotlib
