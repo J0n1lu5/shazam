@@ -58,4 +58,4 @@ Außerdem wurde eine Song-History hinzugefügt. Diese kann über einen Button an
 
 
 # UML Diagramm
-![UML-Diagramm](https://github.com/timhornikel/shazam/UML-1.png)
+![UML-Diagramm](https://github.com/J0n1lu5/shazam/blob/main/UML-1.png)
